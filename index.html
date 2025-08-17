@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pay via UPI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f9f9f9;
+    }
+    .card {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      color: white;
+      background: #008060;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+  </style>
+  <script>
+    window.onload = function () {
+      // replace with your actual UPI link
+      const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=TestPayment";
+      // Try to auto-open UPI app
+      window.location.href = upiLink;
+    };
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h2>Pay ₹50 via UPI</h2>
+    <p>If your UPI app doesn’t open automatically, click below:</p>
+    <a class="button" href="upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=TestPayment">
+      Pay Now
+    </a>
+  </div>
+</body>
+</html>
