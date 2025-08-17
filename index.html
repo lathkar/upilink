@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pay via UPI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 50px;
-      background: #f9f9f9;
+      margin-top: 50px;
     }
-    .card {
-      max-width: 400px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    a.button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 18px;
+    button {
+      background-color: #4CAF50;
       color: white;
-      background: #008060;
+      border: none;
+      padding: 12px 20px;
+      font-size: 18px;
       border-radius: 8px;
-      text-decoration: none;
+      cursor: pointer;
+    }
+    #qr {
+      margin-top: 20px;
+    }
+    #copyLink {
+      margin-top: 15px;
+      display: none;
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
     }
   </style>
-  <script>
-    window.onload = function () {
-      // replace with your actual UPI link
-      const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=TestPayment";
-      // Try to auto-open UPI app
-      window.location.href = upiLink;
-    };
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
-  <div class="card">
-    <h2>Pay ₹50 via UPI</h2>
-    <p>If your UPI app doesn’t open automatically, click below:</p>
-    <a class="button" href="upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=TestPayment">
-      Pay Now
-    </a>
+  <h2>Pay ₹50 via UPI</h2>
+  <button id="payBtn">Pay Now</button>
+
+  <div id="qr" style="display: none;">
+    <h3>Scan this QR with any UPI app</h3>
+    <canvas id="qr-code"></canvas>
+    <p id="copyLink">Copy UPI Link</p>
   </div>
+
+  <script>
+    const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=test";
+
+    document.getElementById("payBtn").addEventListener("click", function () {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // Create an invisible anchor and click it
+        const a = document.createElement("a");
+        a.href = upiLink;
+        a.click();
+      } else {
+        // Show QR code + copy link option
+        document.getElementById("qr").style.display = "block";
+        new QRious({
+          element: document.getElementById("qr-code"),
+          value: upiLink,
+          size: 250
+        });
+        document.getElementById("copyLink").style.display = "block";
+      }
+    });
+
+    // Copy UPI link for desktop users
+    document.getElementById("copyLink").addEventListener("click", function () {
+      navigator.clipboard.writeText(upiLink).then(() => {
+        alert("UPI link copied! Open it on your mobile.");
+      });
+    });
+  </script>
 </body>
 </html>
