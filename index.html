@@ -22,6 +22,13 @@
     #qr {
       margin-top: 20px;
     }
+    #copyLink {
+      margin-top: 15px;
+      display: none;
+      cursor: pointer;
+      color: #007bff;
+      text-decoration: underline;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
@@ -32,27 +39,37 @@
   <div id="qr" style="display: none;">
     <h3>Scan this QR with any UPI app</h3>
     <canvas id="qr-code"></canvas>
+    <p id="copyLink">Copy UPI Link</p>
   </div>
 
   <script>
     const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=test";
 
     document.getElementById("payBtn").addEventListener("click", function () {
-      // Detect if user is on mobile
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isMobile) {
-        // Redirect to UPI app
-        window.location.href = upiLink;
+        // Create an invisible anchor and click it
+        const a = document.createElement("a");
+        a.href = upiLink;
+        a.click();
       } else {
-        // Show QR code for desktop users
+        // Show QR code + copy link option
         document.getElementById("qr").style.display = "block";
         new QRious({
           element: document.getElementById("qr-code"),
           value: upiLink,
           size: 250
         });
+        document.getElementById("copyLink").style.display = "block";
       }
+    });
+
+    // Copy UPI link for desktop users
+    document.getElementById("copyLink").addEventListener("click", function () {
+      navigator.clipboard.writeText(upiLink).then(() => {
+        alert("UPI link copied! Open it on your mobile.");
+      });
     });
   </script>
 </body>
