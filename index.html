@@ -3,74 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pay via UPI</title>
+  <title>Payment & Confirmation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
+      margin: 2rem;
+      background-color: #f9f9f9;
     }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 18px;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      background: #fff;
       border-radius: 8px;
-      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    #qr {
-      margin-top: 20px;
+    h1 {
+      color: #333;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
-    #copyLink {
-      margin-top: 15px;
-      display: none;
-      cursor: pointer;
-      color: #007bff;
-      text-decoration: underline;
+    p {
+      margin-bottom: 1rem;
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      color: #fff;
+      background: #0073e6;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    a.button:hover {
+      background: #005bb5;
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
-  <h2>Pay ₹50 via UPI</h2>
-  <button id="payBtn">Pay Now</button>
+  <div class="container">
+    <h1>Complete Your Payment</h1>
+    <p>Dear <strong>{NAME}</strong>,</p>
+    <p>
+      Please make your payment of <strong>₹{AMOUNT}</strong> for the month of
+      <strong>{MONTH}</strong>.
+    </p>
+    <p>
+      After completing the payment, kindly submit your payment details using the form below:
+    </p>
 
-  <div id="qr" style="display: none;">
-    <h3>Scan this QR with any UPI app</h3>
-    <canvas id="qr-code"></canvas>
-    <p id="copyLink">Copy UPI Link</p>
+    <!-- Google Form prefilled link with placeholders -->
+    <a
+      href="https://docs.google.com/forms/d/e/1FAIpQLSe0MW_hAZEx7BEmevhglzp6QFohHeyqj9LOZF-2RTeHoE_TMQ/viewform?usp=pp_url&entry.1932386382={NAME}&entry.273437391={EMAIL}&entry.895409983={MOBNO}&entry.1989076412={MONTH}&entry.1358339513={UTR}"
+      target="_blank"
+      class="button"
+    >
+      Fill Payment Confirmation Form
+    </a>
   </div>
-
-  <script>
-    const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=test";
-
-    document.getElementById("payBtn").addEventListener("click", function () {
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        // Create an invisible anchor and click it
-        const a = document.createElement("a");
-        a.href = upiLink;
-        a.click();
-      } else {
-        // Show QR code + copy link option
-        document.getElementById("qr").style.display = "block";
-        new QRious({
-          element: document.getElementById("qr-code"),
-          value: upiLink,
-          size: 250
-        });
-        document.getElementById("copyLink").style.display = "block";
-      }
-    });
-
-    // Copy UPI link for desktop users
-    document.getElementById("copyLink").addEventListener("click", function () {
-      navigator.clipboard.writeText(upiLink).then(() => {
-        alert("UPI link copied! Open it on your mobile.");
-      });
-    });
-  </script>
 </body>
 </html>
