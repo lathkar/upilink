@@ -33,44 +33,62 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
-  <h2>Pay ₹50 via UPI</h2>
-  <button id="payBtn">Pay Now</button>
+<h2 id="payHeading">Pay ₹50 via UPI</h2>
+<button id="payBtn">Pay Now</button>
 
-  <div id="qr" style="display: none;">
-    <h3>Scan this QR with any UPI app</h3>
-    <canvas id="qr-code"></canvas>
-    <p id="copyLink">Copy UPI Link</p>
-  </div>
+<div id="qr" style="display: none;">
+  <h3>Scan this QR with any UPI app</h3>
+  <canvas id="qr-code"></canvas>
+  <p id="copyLink" style="display:none; cursor:pointer; color:blue; text-decoration:underline;">
+    Copy UPI Link
+  </p>
+</div>
+
 
   <script>
-    const upiLink = "upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=50&cu=INR&tn=test";
+  // Function to read query parameters from URL
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
 
-    document.getElementById("payBtn").addEventListener("click", function () {
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // Get amount and month from URL (fallback defaults if missing)
+  const amount = getQueryParam("amount") || "50"; 
+  const month = getQueryParam("month") || "Payment";
 
-      if (isMobile) {
-        // Create an invisible anchor and click it
-        const a = document.createElement("a");
-        a.href = upiLink;
-        a.click();
-      } else {
-        // Show QR code + copy link option
-        document.getElementById("qr").style.display = "block";
-        new QRious({
-          element: document.getElementById("qr-code"),
-          value: upiLink,
-          size: 250
-        });
-        document.getElementById("copyLink").style.display = "block";
-      }
-    });
+  // Build UPI link dynamically
+  const upiLink = `upi://pay?pa=mlathkar@oksbi&pn=Malhar+Lathkar&am=${amount}&cu=INR&tn=${month}`;
 
-    // Copy UPI link for desktop users
-    document.getElementById("copyLink").addEventListener("click", function () {
-      navigator.clipboard.writeText(upiLink).then(() => {
-        alert("UPI link copied! Open it on your mobile.");
+  // Update heading text to reflect amount
+  document.getElementById("payHeading").innerText = `Pay ₹${amount} via UPI`;
+
+  document.getElementById("payBtn").addEventListener("click", function () {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // Open UPI link directly
+      const a = document.createElement("a");
+      a.href = upiLink;
+      a.click();
+    } else {
+      // Show QR code + copy link option for desktop
+      document.getElementById("qr").style.display = "block";
+      new QRious({
+        element: document.getElementById("qr-code"),
+        value: upiLink,
+        size: 250
       });
+      document.getElementById("copyLink").style.display = "block";
+    }
+  });
+
+  // Copy UPI link for desktop users
+  document.getElementById("copyLink").addEventListener("click", function () {
+    navigator.clipboard.writeText(upiLink).then(() => {
+      alert("UPI link copied! Open it on your mobile.");
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
